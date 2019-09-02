@@ -385,9 +385,15 @@
         {
             ListString listString = new ListString(UndoList, '|');
             string text = listString[index];
-           
-            return = text.Substring(0, text.IndexOf("*", StringComparison.InvariantCulture));
-         
+            #region Modified code
+            text = text.Substring(0, text.IndexOf("*", StringComparison.InvariantCulture));
+            // the full path to the file is taken if the prefix is "/-/temp/".
+            if ((text[0] != '/') || !StringUtil.RemovePrefix("/", text).StartsWith("-/temp/", StringComparison.InvariantCulture))
+            {
+                return text;
+            }
+            return FileUtilSupport.MapPathWithTempRequestPrefix(text);
+            #endregion
         }
 
         /// <summary>
